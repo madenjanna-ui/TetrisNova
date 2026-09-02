@@ -223,6 +223,7 @@ td {
 </head>
 <div class="update-button">
     <button onclick="location.reload()">↻ Обновить</button>
+    <button onclick="togglePresence()">👥</button>
 </div>
 <body>
 
@@ -334,8 +335,32 @@ const months = [
 const monthSelect = document.getElementById("month");
 const peopleTable = document.getElementById("peopleTable");
 const resultTable = document.getElementById("resultTable");
+// Создаём присутствие учеников
+<div id="presenceBlock" style="display:none; margin-top:20px;">
 
+    <h2>👥 Присутствие учеников</h2>
 
+    <table>
+        <thead>
+            <tr>
+                <th>Неделя</th>
+                <th>Будни</th>
+                <th>Вых.</th>
+            </tr>
+        </thead>
+
+        <tbody id="presenceTable"></tbody>
+
+        <tfoot>
+            <tr>
+                <th>Итого</th>
+                <th id="presenceWeekdaysTotal">0</th>
+                <th id="presenceWeekendTotal">0</th>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>
 // Заполняем месяцы
 months.forEach((month, index) => {
 
