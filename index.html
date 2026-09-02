@@ -2,629 +2,509 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 
-<title>Журнал записей</title>
+<title>📋 Журнал записей</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: linear-gradient(135deg, #eef2ff, #f8faff);
-    color: #202124;
-    min-height: 100vh;
+body{
+    margin:0;
+    padding:16px;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#eef3ff,#f8f9ff,#edf7ff);
+    color:#20242b;
 }
 
-.container {
-    max-width: 1000px;
-    margin: auto;
-    padding: 20px;
+.container{
+    max-width:1100px;
+    margin:auto;
 }
 
-header {
-    background: rgba(255,255,255,.75);
-    backdrop-filter: blur(18px);
-    border-radius: 22px;
-    padding: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,.08);
-    margin-bottom: 18px;
+.card{
+    background:rgba(255,255,255,.88);
+    border-radius:20px;
+    padding:16px;
+    margin-bottom:16px;
+    box-shadow:0 8px 30px rgba(60,80,120,.12);
+    backdrop-filter:blur(10px);
 }
 
-h1 {
-    margin: 0 0 15px;
-    font-size: 25px;
+h1{
+    margin:0 0 14px;
+    text-align:center;
+    font-size:25px;
 }
 
-h2 {
-    margin-top: 0;
-}
-
-.controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+.controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    align-items:center;
 }
 
 select,
 button,
-input {
-    font: inherit;
+input{
+    font:inherit;
 }
 
-select {
-    border: 0;
-    background: #fff;
-    padding: 12px 15px;
-    border-radius: 13px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.07);
+select{
+    padding:10px 12px;
+    border:1px solid #d8deeb;
+    border-radius:12px;
+    background:white;
 }
 
-button {
-    border: 0;
-    border-radius: 13px;
-    padding: 12px 16px;
-    cursor: pointer;
-    background: #635bff;
-    color: white;
-    font-weight: 600;
-    transition: .2s;
+button{
+    border:0;
+    border-radius:12px;
+    padding:10px 13px;
+    cursor:pointer;
+    background:#eef2f8;
+    transition:.15s;
 }
 
-button:hover {
-    transform: translateY(-1px);
-    opacity: .92;
+button:hover{
+    transform:translateY(-1px);
 }
 
-button.secondary {
-    background: #e9e9f5;
-    color: #333;
+button:active{
+    transform:scale(.97);
 }
 
-button.danger {
-    background: #ff5c67;
+.btn-save{
+    background:#dff6e7;
 }
 
-.card {
-    background: rgba(255,255,255,.78);
-    backdrop-filter: blur(18px);
-    border-radius: 22px;
-    padding: 15px;
-    box-shadow: 0 8px 30px rgba(0,0,0,.07);
-    overflow-x: auto;
+.btn-backup{
+    background:#e4efff;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 650px;
+.btn-restore{
+    background:#fff0d9;
 }
 
-th {
-    text-align: left;
-    font-size: 13px;
-    color: #666;
-    padding: 12px 8px;
-    border-bottom: 1px solid #ddd;
+.btn-cloud{
+    background:#e8e4ff;
 }
 
-td {
-    padding: 8px;
-    border-bottom: 1px solid #eee;
+.btn-danger{
+    background:#ffe3e3;
 }
 
-.number {
-    width: 35px;
-    color: #888;
-    text-align: center;
+.status{
+    text-align:center;
+    margin-top:10px;
+    font-size:13px;
+    color:#687386;
+    min-height:18px;
 }
 
-.name {
-    min-width: 180px;
+.table-wrap{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
 }
 
-.name input {
-    width: 100%;
-    border: 0;
-    background: transparent;
-    font-weight: 600;
-    outline: none;
-    padding: 9px 5px;
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:600px;
 }
 
-.data-input {
-    width: 100%;
-    max-width: 120px;
-    border: 1px solid #ddd;
-    background: white;
-    border-radius: 10px;
-    padding: 9px;
-    text-align: center;
-    outline: none;
+th{
+    background:#f0f3f8;
+    font-weight:700;
 }
 
-.data-input:focus,
-.name input:focus {
-    border-color: #635bff;
+th,
+td{
+    padding:8px;
+    border-bottom:1px solid #e5e8ee;
+    text-align:center;
 }
 
-.summary {
-    margin-top: 18px;
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 12px;
+td.name-cell{
+    text-align:left;
+    min-width:180px;
 }
 
-.summary-box {
-    background: rgba(255,255,255,.8);
-    border-radius: 18px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,.06);
+.name-input{
+    width:100%;
+    border:1px solid transparent;
+    background:transparent;
+    padding:8px;
+    border-radius:8px;
 }
 
-.summary-title {
-    font-size: 12px;
-    color: #777;
+.name-input:focus{
+    border-color:#bfc9dc;
+    background:white;
+    outline:none;
 }
 
-.summary-value {
-    font-size: 24px;
-    font-weight: 700;
-    margin-top: 4px;
+.data-input{
+    width:80px;
+    padding:8px;
+    border:1px solid #d8deeb;
+    border-radius:8px;
+    text-align:center;
+    background:white;
 }
 
-.result {
-    margin-top: 20px;
+.summary{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-top:15px;
 }
 
-.result h2 {
-    font-size: 19px;
-    margin: 0 0 12px;
+.summary-box{
+    background:#f5f7fb;
+    border-radius:14px;
+    padding:13px;
+    text-align:center;
 }
 
-.saved {
-    text-align: center;
-    color: #777;
-    font-size: 12px;
-    margin-top: 12px;
+.summary-title{
+    font-size:13px;
+    color:#687386;
 }
 
-
-/* =====================================
-   МОДАЛЬНОЕ ОКНО ПРИСУТСТВИЯ
-===================================== */
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    inset: 0;
-    background: rgba(20, 20, 40, .42);
-    backdrop-filter: blur(5px);
-    align-items: center;
-    justify-content: center;
-    padding: 15px;
+.summary-value{
+    font-size:23px;
+    font-weight:700;
+    margin-top:4px;
 }
 
-.modal.show {
-    display: flex;
+.result-title{
+    margin:0 0 12px;
 }
 
-.modal-content {
-    width: 100%;
-    max-width: 650px;
-    max-height: 90vh;
-    overflow-y: auto;
-    background: rgba(255,255,255,.96);
-    border-radius: 24px;
-    padding: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.2);
-    animation: modalShow .2s ease;
+.bottom{
+    text-align:center;
+    margin-top:10px;
 }
 
-@keyframes modalShow {
-    from {
-        opacity: 0;
-        transform: translateY(15px) scale(.98);
+.refresh{
+    font-size:13px;
+    padding:7px 11px;
+    background:#f0f2f6;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(20,30,50,.45);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+    z-index:1000;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:min(700px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:white;
+    border-radius:22px;
+    padding:18px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.modal-head h2{
+    margin:0;
+    font-size:20px;
+}
+
+.close{
+    width:38px;
+    height:38px;
+    padding:0;
+    border-radius:50%;
+    background:#f0f2f5;
+}
+
+.presence-table{
+    min-width:430px;
+}
+
+.presence-input{
+    width:90px;
+    padding:9px;
+    border:1px solid #d8deeb;
+    border-radius:9px;
+    text-align:center;
+}
+
+.modal-buttons{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:15px;
+}
+
+.file-input{
+    display:none;
+}
+
+.backup-info{
+    margin-top:10px;
+    padding:10px 12px;
+    background:#f5f7fb;
+    border-radius:12px;
+    font-size:13px;
+    color:#687386;
+    text-align:center;
+}
+
+@media(max-width:650px){
+
+    body{
+        padding:8px;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.modal-header h2 {
-    margin: 0;
-    font-size: 20px;
-}
-
-.modal-close {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border-radius: 50%;
-    background: #eeeeF7;
-    color: #444;
-    font-size: 24px;
-    line-height: 40px;
-}
-
-.presence-month {
-    width: 100%;
-    margin-bottom: 15px;
-}
-
-.presence-card {
-    overflow-x: auto;
-}
-
-.presence-table {
-    min-width: 400px;
-}
-
-.presence-table th,
-.presence-table td {
-    text-align: center;
-}
-
-.presence-table th:first-child,
-.presence-table td:first-child {
-    text-align: left;
-}
-
-.presence-input {
-    width: 80px;
-    max-width: 100%;
-    padding: 9px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    text-align: center;
-    outline: none;
-    background: white;
-}
-
-.presence-input:focus {
-    border-color: #635bff;
-}
-
-.presence-total {
-    font-weight: 700;
-}
-
-.modal-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 18px;
-}
-
-.modal-actions button {
-    flex: 1;
-}
-
-.presence-saved {
-    text-align: center;
-    color: #777;
-    font-size: 12px;
-    margin-top: 10px;
-}
-
-
-/* =====================================
-   КНОПКА ОБНОВЛЕНИЯ
-===================================== */
-
-.update-button {
-    text-align: center;
-    margin: 20px 0 10px;
-}
-
-.update-button button {
-    background: rgba(255,255,255,.7);
-    color: #666;
-    border: 1px solid rgba(0,0,0,.08);
-    padding: 7px 12px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: 500;
-    box-shadow: none;
-}
-
-
-/* =====================================
-   МОБИЛЬНАЯ ВЕРСИЯ
-===================================== */
-
-@media(max-width:600px) {
-
-    .container {
-        padding: 10px;
+    .card{
+        padding:11px;
+        border-radius:16px;
     }
 
-    header {
-        border-radius: 17px;
-        padding: 15px;
+    h1{
+        font-size:21px;
     }
 
-    .summary {
-        grid-template-columns: 1fr;
+    .controls{
+        gap:6px;
     }
 
-    h1 {
-        font-size: 22px;
+    .controls button,
+    .controls select{
+        padding:9px 10px;
+        font-size:14px;
     }
 
-    .controls {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+    .summary{
+        gap:6px;
     }
 
-    .controls select {
-        grid-column: 1 / -1;
-        width: 100%;
+    .summary-box{
+        padding:10px 5px;
     }
 
-    .controls button {
-        width: 100%;
+    .summary-value{
+        font-size:19px;
     }
 
-    .modal {
-        padding: 10px;
-    }
-
-    .modal-content {
-        border-radius: 20px;
-        padding: 15px;
-        max-height: 94vh;
-    }
-
-    .modal-header h2 {
-        font-size: 18px;
-    }
-
-    .modal-actions {
-        flex-direction: column;
-    }
-
-    .presence-input {
-        width: 65px;
+    .summary-title{
+        font-size:11px;
     }
 }
 </style>
 </head>
 
-
 <body>
 
 <div class="container">
 
-    <!-- =========================
-         ШАПКА
-    ========================== -->
-
-    <header>
+    <div class="card">
 
         <h1>📋 Журнал записей</h1>
 
         <div class="controls">
 
-            <select id="month"></select>
+            <select id="monthSelect"></select>
 
-            <button onclick="saveData()">
+            <button class="btn-save" id="saveBtn">
                 💾 Сохранить
             </button>
 
-            <button class="secondary" onclick="togglePresence()">
+            <button class="btn-backup" id="backupBtn">
+                💾 Резерв
+            </button>
+
+            <button class="btn-restore" id="restoreBtn">
+                📂 Восстановить
+            </button>
+
+            <button class="btn-cloud" id="cloudBtn">
+                ☁️ Облако
+            </button>
+
+            <button id="presenceBtn">
                 👥
             </button>
 
-            <button class="secondary" onclick="clearMonth()">
+            <button class="btn-danger" id="clearBtn">
                 Очистить месяц
             </button>
 
         </div>
 
-        <div class="saved" id="savedMessage">
-            Выберите месяц
-        </div>
+        <div id="status" class="status"></div>
 
-    </header>
+        <input
+            type="file"
+            id="restoreFile"
+            class="file-input"
+            accept=".json,application/json"
+        >
 
+    </div>
 
-    <!-- =========================
-         ОСНОВНАЯ ТАБЛИЦА
-    ========================== -->
 
     <div class="card">
 
-        <table>
+        <div class="table-wrap">
 
-            <thead>
-                <tr>
-                    <th class="number">№</th>
-                    <th>Кто</th>
-                    <th>Участие</th>
-                    <th>Уроки</th>
-                    <th>Баллы</th>
-                </tr>
-            </thead>
+            <table>
 
-            <tbody id="peopleTable"></tbody>
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Кто</th>
+                        <th>Участие</th>
+                        <th>Уроки</th>
+                        <th>Баллы</th>
+                    </tr>
+                </thead>
 
-        </table>
+                <tbody id="peopleBody"></tbody>
 
-    </div>
+            </table>
 
+        </div>
 
-    <!-- =========================
-         ИТОГИ
-    ========================== -->
+        <div class="summary">
 
-    <div class="summary">
-
-        <div class="summary-box">
-
-            <div class="summary-title">
-                Участие / часы
+            <div class="summary-box">
+                <div class="summary-title">Участие / часы</div>
+                <div class="summary-value" id="totalParticipation">0</div>
             </div>
 
-            <div class="summary-value" id="totalParticipation">
-                0
+            <div class="summary-box">
+                <div class="summary-title">Уроки</div>
+                <div class="summary-value" id="totalLessons">0</div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-title">Баллы</div>
+                <div class="summary-value" id="totalPoints">0</div>
             </div>
 
         </div>
 
-
-        <div class="summary-box">
-
-            <div class="summary-title">
-                Уроки
-            </div>
-
-            <div class="summary-value" id="totalLessons">
-                0
-            </div>
-
-        </div>
-
-
-        <div class="summary-box">
-
-            <div class="summary-title">
-                Баллы
-            </div>
-
-            <div class="summary-value" id="totalPoints">
-                0
-            </div>
-
+        <div class="bottom">
+            <button class="refresh" id="refreshBtn">
+                ↻ Обновить
+            </button>
         </div>
 
     </div>
 
 
-    <!-- =========================
-         ИТОГОВАЯ ТАБЛИЦА
-    ========================== -->
+    <div class="card">
 
-    <div class="card result">
+        <h2 class="result-title">📊 Итог за месяц</h2>
 
-        <h2>📊 Итог за месяц</h2>
+        <div class="table-wrap">
 
-        <table>
+            <table>
 
-            <thead>
+                <thead>
+                    <tr>
+                        <th>Показатель</th>
+                        <th>Количество</th>
+                    </tr>
+                </thead>
 
-                <tr>
-                    <th>Кто</th>
-                    <th>Участие</th>
-                    <th>Уроки</th>
-                    <th>Баллы</th>
-                </tr>
+                <tbody>
 
-            </thead>
+                    <tr>
+                        <td>Участие / часы</td>
+                        <td id="resultParticipation">0</td>
+                    </tr>
 
-            <tbody id="resultTable"></tbody>
+                    <tr>
+                        <td>Уроки</td>
+                        <td id="resultLessons">0</td>
+                    </tr>
 
-        </table>
+                    <tr>
+                        <td>Баллы</td>
+                        <td id="resultPoints">0</td>
+                    </tr>
 
-    </div>
+                </tbody>
 
+            </table>
 
-    <!-- =========================
-         КНОПКА ОБНОВЛЕНИЯ
-    ========================== -->
-
-    <div class="update-button">
-
-        <button onclick="location.reload()">
-            ↻ Обновить
-        </button>
+        </div>
 
     </div>
 
 </div>
 
 
-<!-- =====================================================
-     МОДАЛЬНОЕ ОКНО ПРИСУТСТВИЯ
-====================================================== -->
+<!-- ==================== МОДАЛЬНОЕ ОКНО ПРИСУТСТВИЯ ==================== -->
 
 <div class="modal" id="presenceModal">
 
-    <div class="modal-content">
+    <div class="modal-box">
 
-        <div class="modal-header">
+        <div class="modal-head">
 
-            <h2>👥 Присутствие учеников</h2>
+            <h2>👥 Присутствие</h2>
 
-            <button
-                class="modal-close"
-                onclick="togglePresence()"
-                aria-label="Закрыть"
-            >
-                ×
+            <button class="close" id="closePresence">
+                ✕
             </button>
 
         </div>
 
+        <select id="presenceMonth"></select>
 
-        <!-- Выбор месяца для присутствия -->
+        <div class="backup-info">
+            Здесь записывается общее количество присутствующих.
+            Данные сохраняются отдельно для каждого месяца.
+        </div>
 
-        <select
-            id="presenceMonth"
-            class="presence-month"
-        ></select>
-
-
-        <div class="presence-card">
+        <div class="table-wrap" style="margin-top:15px">
 
             <table class="presence-table">
 
                 <thead>
-
                     <tr>
                         <th>Неделя</th>
                         <th>Будни</th>
                         <th>Вых.</th>
                     </tr>
-
                 </thead>
 
-                <tbody id="presenceTable"></tbody>
+                <tbody id="presenceBody"></tbody>
 
                 <tfoot>
 
                     <tr>
-
                         <th>Итого</th>
-
-                        <th
-                            class="presence-total"
-                            id="presenceWeekdaysTotal"
-                        >
-                            0
-                        </th>
-
-                        <th
-                            class="presence-total"
-                            id="presenceWeekendTotal"
-                        >
-                            0
-                        </th>
-
+                        <th id="weekdayTotal">0</th>
+                        <th id="weekendTotal">0</th>
                     </tr>
 
                 </tfoot>
@@ -633,27 +513,17 @@ td {
 
         </div>
 
+        <div class="modal-buttons">
 
-        <div class="modal-actions">
-
-            <button onclick="savePresence()">
+            <button id="presenceSaveBtn" class="btn-save">
                 💾 Сохранить
             </button>
 
-            <button
-                class="secondary"
-                onclick="togglePresence()"
-            >
+            <button id="presenceCloseBtn">
                 Закрыть
             </button>
 
         </div>
-
-
-        <div
-            class="presence-saved"
-            id="presenceSavedMessage"
-        ></div>
 
     </div>
 
@@ -662,13 +532,9 @@ td {
 
 <script>
 
-/* =====================================
-   НАСТРОЙКИ
-===================================== */
-
 const PEOPLE_COUNT = 30;
 
-const months = [
+const MONTHS = [
     "Январь",
     "Февраль",
     "Март",
@@ -683,398 +549,363 @@ const months = [
     "Декабрь"
 ];
 
+let currentMonth = new Date().getMonth() + 1;
 
-/* =====================================
-   ЭЛЕМЕНТЫ
-===================================== */
-
-const monthSelect =
-    document.getElementById("month");
-
-const peopleTable =
-    document.getElementById("peopleTable");
-
-const resultTable =
-    document.getElementById("resultTable");
-
-const presenceModal =
-    document.getElementById("presenceModal");
-
-const presenceMonth =
-    document.getElementById("presenceMonth");
-
-const presenceTable =
-    document.getElementById("presenceTable");
+let autoSaveTimer = null;
+let presenceAutoSaveTimer = null;
 
 
-/* =====================================
-   СОЗДАНИЕ МЕСЯЦЕВ
-===================================== */
+/* =========================================================
+   ОБЩИЕ ФУНКЦИИ
+========================================================= */
 
-function createMonthOptions(select) {
+function setStatus(text, good = true){
 
-    select.innerHTML = "";
+    const el = document.getElementById("status");
 
-    months.forEach((month, index) => {
+    el.textContent = text;
 
-        const option =
-            document.createElement("option");
+    el.style.color = good ? "#687386" : "#c0392b";
 
-        option.value = index + 1;
-        option.textContent = month;
+    clearTimeout(setStatus.timer);
 
-        select.appendChild(option);
+    setStatus.timer = setTimeout(() => {
+        el.textContent = "";
+    }, 4000);
+}
+
+
+function monthName(month){
+
+    return MONTHS[month - 1] || "";
+}
+
+
+function storageKey(month){
+
+    return "journal-month-" + month;
+}
+
+
+function presenceKey(month){
+
+    return "journal-presence-" + month;
+}
+
+
+/* =========================================================
+   МЕСЯЦЫ
+========================================================= */
+
+function createMonthOptions(){
+
+    const monthSelect =
+        document.getElementById("monthSelect");
+
+    const presenceMonth =
+        document.getElementById("presenceMonth");
+
+    monthSelect.innerHTML = "";
+    presenceMonth.innerHTML = "";
+
+    MONTHS.forEach((name, index) => {
+
+        const month = index + 1;
+
+        const option1 = document.createElement("option");
+
+        option1.value = month;
+        option1.textContent = name;
+
+        monthSelect.appendChild(option1);
+
+
+        const option2 = document.createElement("option");
+
+        option2.value = month;
+        option2.textContent = name;
+
+        presenceMonth.appendChild(option2);
 
     });
 
+    monthSelect.value = currentMonth;
+    presenceMonth.value = currentMonth;
 }
 
 
-/* Основной выбор месяца */
+/* =========================================================
+   ИМЕНА
+========================================================= */
 
-createMonthOptions(monthSelect);
+function getPeopleNames(){
 
-monthSelect.value =
-    new Date().getMonth() + 1;
+    try{
 
+        const saved =
+            localStorage.getItem("journal-people");
 
-/* Выбор месяца в присутствии */
+        if(!saved){
+            return Array(PEOPLE_COUNT).fill("");
+        }
 
-createMonthOptions(presenceMonth);
+        const names = JSON.parse(saved);
 
-presenceMonth.value =
-    monthSelect.value;
+        if(!Array.isArray(names)){
+            return Array(PEOPLE_COUNT).fill("");
+        }
 
+        const result =
+            Array(PEOPLE_COUNT).fill("");
 
-/* =====================================
-   ОБЩИЙ СПИСОК УЧАСТНИКОВ
-===================================== */
+        for(let i = 0; i < PEOPLE_COUNT; i++){
 
-function getPeopleNames() {
+            result[i] = names[i] || "";
 
-    const saved =
-        JSON.parse(
-            localStorage.getItem("journal-people")
-            || "null"
-        );
+        }
 
-    if (
-        saved &&
-        Array.isArray(saved)
-    ) {
+        return result;
 
-        return saved;
+    }catch(e){
+
+        return Array(PEOPLE_COUNT).fill("");
 
     }
 
-    return Array(PEOPLE_COUNT).fill("");
-
 }
 
 
-function savePeopleNames() {
+function savePeopleNames(){
 
     const names = [];
 
-    for (
-        let i = 1;
-        i <= PEOPLE_COUNT;
-        i++
-    ) {
+    document
+        .querySelectorAll(".name-input")
+        .forEach(input => {
 
-        const input =
-            document.getElementById(
-                `name-${i}`
-            );
+            names.push(input.value.trim());
 
-        if (input) {
-            names.push(input.value);
-        } else {
-            names.push("");
-        }
-
-    }
+        });
 
     localStorage.setItem(
         "journal-people",
         JSON.stringify(names)
     );
-
 }
 
 
-/* =====================================
-   СОЗДАНИЕ УЧАСТНИКОВ
-===================================== */
+/* =========================================================
+   СОЗДАНИЕ ЛЮДЕЙ
+========================================================= */
 
-function createPeople() {
+function createPeople(){
 
-    peopleTable.innerHTML = "";
+    const body =
+        document.getElementById("peopleBody");
+
+    body.innerHTML = "";
 
     const names = getPeopleNames();
 
-    for (
-        let i = 1;
-        i <= PEOPLE_COUNT;
-        i++
-    ) {
+    for(let i = 0; i < PEOPLE_COUNT; i++){
 
-        const tr =
-            document.createElement("tr");
+        const tr = document.createElement("tr");
 
-        const tdNumber =
-            document.createElement("td");
+        tr.innerHTML = `
 
-        tdNumber.className = "number";
-        tdNumber.textContent = i;
+            <td>${i + 1}</td>
 
-        const tdName =
-            document.createElement("td");
+            <td class="name-cell">
+                <input
+                    class="name-input"
+                    data-index="${i}"
+                    value="${escapeHtml(names[i])}"
+                    placeholder="Введите имя"
+                >
+            </td>
 
-        tdName.className = "name";
+            <td>
+                <input
+                    class="data-input participation"
+                    data-index="${i}"
+                    type="text"
+                    inputmode="decimal"
+                    placeholder="+"
+                >
+            </td>
 
-        const nameInput =
-            document.createElement("input");
+            <td>
+                <input
+                    class="data-input lessons"
+                    data-index="${i}"
+                    type="number"
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                >
+            </td>
 
-        nameInput.type = "text";
-        nameInput.id = `name-${i}`;
-        nameInput.placeholder = `Имя ${i}`;
-        nameInput.value =
-            names[i - 1] || "";
+            <td>
+                <input
+                    class="data-input points"
+                    data-index="${i}"
+                    type="number"
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                >
+            </td>
 
-        nameInput.addEventListener(
-            "input",
-            () => {
+        `;
+
+        body.appendChild(tr);
+
+    }
+
+
+    document
+        .querySelectorAll(".name-input")
+        .forEach(input => {
+
+            input.addEventListener("input", () => {
+
                 savePeopleNames();
+
+                scheduleAutoSave();
+
+            });
+
+        });
+
+
+    document
+        .querySelectorAll(".data-input")
+        .forEach(input => {
+
+            input.addEventListener("input", () => {
+
                 updateResult();
-            }
-        );
 
-        tdName.appendChild(nameInput);
+                scheduleAutoSave();
 
+            });
 
-        const tdParticipation =
-            document.createElement("td");
-
-        const participationInput =
-            document.createElement("input");
-
-        participationInput.className =
-            "data-input";
-
-        participationInput.id =
-            `participation-${i}`;
-
-        participationInput.placeholder =
-            "+ или часы";
-
-        participationInput.addEventListener(
-            "input",
-            updateResult
-        );
-
-        tdParticipation.appendChild(
-            participationInput
-        );
-
-
-        const tdLessons =
-            document.createElement("td");
-
-        const lessonsInput =
-            document.createElement("input");
-
-        lessonsInput.className =
-            "data-input";
-
-        lessonsInput.id =
-            `lessons-${i}`;
-
-        lessonsInput.type =
-            "number";
-
-        lessonsInput.min = "0";
-
-        lessonsInput.placeholder = "0";
-
-        lessonsInput.addEventListener(
-            "input",
-            updateResult
-        );
-
-        tdLessons.appendChild(
-            lessonsInput
-        );
-
-
-        const tdPoints =
-            document.createElement("td");
-
-        const pointsInput =
-            document.createElement("input");
-
-        pointsInput.className =
-            "data-input";
-
-        pointsInput.id =
-            `points-${i}`;
-
-        pointsInput.type =
-            "number";
-
-        pointsInput.min = "0";
-
-        pointsInput.placeholder = "0";
-
-        pointsInput.addEventListener(
-            "input",
-            updateResult
-        );
-
-        tdPoints.appendChild(
-            pointsInput
-        );
-
-
-        tr.appendChild(tdNumber);
-        tr.appendChild(tdName);
-        tr.appendChild(tdParticipation);
-        tr.appendChild(tdLessons);
-        tr.appendChild(tdPoints);
-
-        peopleTable.appendChild(tr);
-
-    }
+        });
 
 }
 
 
-/* =====================================
-   КЛЮЧ ОСНОВНОГО МЕСЯЦА
-===================================== */
+/* =========================================================
+   БЕЗОПАСНЫЙ ТЕКСТ ДЛЯ INPUT
+========================================================= */
 
-function storageKey() {
+function escapeHtml(value){
 
-    return "journal-month-" +
-        monthSelect.value;
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 
 }
 
 
-/* =====================================
-   ЗАГРУЗКА ОСНОВНОГО МЕСЯЦА
-===================================== */
+/* =========================================================
+   ЗАГРУЗКА МЕСЯЦА
+========================================================= */
 
-function loadMonth() {
+function loadMonth(){
 
-    const data =
-        JSON.parse(
-            localStorage.getItem(
-                storageKey()
-            ) || "null"
+    const saved =
+        localStorage.getItem(
+            storageKey(currentMonth)
         );
 
+    let data = [];
 
-    for (
-        let i = 1;
-        i <= PEOPLE_COUNT;
-        i++
-    ) {
+    if(saved){
 
-        const participation =
-            document.getElementById(
-                `participation-${i}`
-            );
+        try{
 
-        const lessons =
-            document.getElementById(
-                `lessons-${i}`
-            );
+            data = JSON.parse(saved);
 
-        const points =
-            document.getElementById(
-                `points-${i}`
-            );
+        }catch(e){
 
+            data = [];
 
-        participation.value =
-            data?.people?.[i - 1]?.participation
-            || "";
-
-        lessons.value =
-            data?.people?.[i - 1]?.lessons
-            || "";
-
-        points.value =
-            data?.people?.[i - 1]?.points
-            || "";
+        }
 
     }
+
+
+    document
+        .querySelectorAll(".participation")
+        .forEach((input, index) => {
+
+            input.value =
+                data[index]?.participation ?? "";
+
+        });
+
+
+    document
+        .querySelectorAll(".lessons")
+        .forEach((input, index) => {
+
+            input.value =
+                data[index]?.lessons ?? "";
+
+        });
+
+
+    document
+        .querySelectorAll(".points")
+        .forEach((input, index) => {
+
+            input.value =
+                data[index]?.points ?? "";
+
+        });
 
 
     updateResult();
 
-
-    /* Синхронизируем месяц присутствия */
-
-    presenceMonth.value =
-        monthSelect.value;
-
-
-    document.getElementById(
-        "savedMessage"
-    ).textContent = data
-        ? "Записи загружены"
-        : "Для этого месяца записей пока нет";
-
-
-    /* Если окно присутствия открыто —
-       загружаем соответствующий месяц */
-
-    if (
-        presenceModal.classList.contains("show")
-    ) {
-
-        createPresenceTable();
-        loadPresence();
-
-    }
-
 }
 
 
-/* =====================================
-   СОХРАНЕНИЕ ОСНОВНЫХ ДАННЫХ
-===================================== */
+/* =========================================================
+   СОХРАНЕНИЕ МЕСЯЦА
+========================================================= */
 
-function saveData() {
+function saveData(showMessage = true){
 
     savePeopleNames();
 
-    const people = [];
+    const data = [];
 
-    for (
-        let i = 1;
-        i <= PEOPLE_COUNT;
-        i++
-    ) {
+    for(let i = 0; i < PEOPLE_COUNT; i++){
 
-        people.push({
+        const participation =
+            document.querySelector(
+                `.participation[data-index="${i}"]`
+            )?.value || "";
 
-            participation:
-                document.getElementById(
-                    `participation-${i}`
-                ).value,
+        const lessons =
+            document.querySelector(
+                `.lessons[data-index="${i}"]`
+            )?.value || "";
 
-            lessons:
-                document.getElementById(
-                    `lessons-${i}`
-                ).value,
+        const points =
+            document.querySelector(
+                `.points[data-index="${i}"]`
+            )?.value || "";
 
-            points:
-                document.getElementById(
-                    `points-${i}`
-                ).value
+
+        data.push({
+
+            participation,
+            lessons,
+            points
 
         });
 
@@ -1082,529 +913,363 @@ function saveData() {
 
 
     localStorage.setItem(
-
-        storageKey(),
-
-        JSON.stringify({
-            people: people
-        })
-
+        storageKey(currentMonth),
+        JSON.stringify(data)
     );
 
 
-    document.getElementById(
-        "savedMessage"
-    ).textContent =
-        "✓ Сохранено";
+    if(showMessage){
+
+        setStatus(
+            `✓ ${monthName(currentMonth)} сохранён`
+        );
+
+    }
 
 }
 
 
-/* =====================================
-   ИТОГОВАЯ ТАБЛИЦА
-===================================== */
+/* =========================================================
+   АВТОСОХРАНЕНИЕ
+========================================================= */
 
-function updateResult() {
+function scheduleAutoSave(){
 
-    resultTable.innerHTML = "";
+    clearTimeout(autoSaveTimer);
 
-    let totalLessons = 0;
-    let totalPoints = 0;
-    let totalHours = 0;
+    autoSaveTimer = setTimeout(() => {
 
+        saveData(false);
 
-    for (
-        let i = 1;
-        i <= PEOPLE_COUNT;
-        i++
-    ) {
+    }, 500);
 
-        const name =
-            document.getElementById(
-                `name-${i}`
-            ).value.trim();
-
-        const participation =
-            document.getElementById(
-                `participation-${i}`
-            ).value.trim();
-
-        const lessons =
-            Number(
-                document.getElementById(
-                    `lessons-${i}`
-                ).value
-            ) || 0;
-
-        const points =
-            Number(
-                document.getElementById(
-                    `points-${i}`
-                ).value
-            ) || 0;
+}
 
 
-        totalLessons += lessons;
-        totalPoints += points;
+/* =========================================================
+   ИТОГИ
+========================================================= */
+
+function updateResult(){
+
+    let participation = 0;
+    let lessons = 0;
+    let points = 0;
 
 
-        /*
-         * Если указано число —
-         * считаем его как часы.
-         *
-         * Если указано "+" —
-         * просто показываем участие,
-         * но в часы его не прибавляем.
-         */
+    document
+        .querySelectorAll(".participation")
+        .forEach(input => {
 
-        if (
-            participation !== "+" &&
-            participation !== "" &&
-            !isNaN(Number(participation))
-        ) {
+            const value =
+                String(input.value).trim().replace(",", ".");
 
-            totalHours +=
-                Number(participation);
+            /*
+              "+" считается как 1 участие.
+              Число считается как количество часов.
+            */
 
-        }
+            if(value === "+"){
 
+                participation += 1;
 
-        if (
-            name ||
-            participation ||
-            lessons ||
-            points
-        ) {
+            }else if(value !== ""){
 
-            const tr =
-                document.createElement("tr");
+                const number =
+                    parseFloat(value);
 
+                if(!isNaN(number)){
 
-            const tdName =
-                document.createElement("td");
+                    participation += number;
 
-            tdName.textContent =
-                name || "Без имени";
+                }
+
+            }
+
+        });
 
 
-            const tdParticipation =
-                document.createElement("td");
+    document
+        .querySelectorAll(".lessons")
+        .forEach(input => {
 
-            tdParticipation.textContent =
-                participation || "—";
+            const value =
+                parseFloat(input.value);
 
+            if(!isNaN(value)){
 
-            const tdLessons =
-                document.createElement("td");
+                lessons += value;
 
-            tdLessons.textContent =
-                lessons;
+            }
 
-
-            const tdPoints =
-                document.createElement("td");
-
-            tdPoints.textContent =
-                points;
+        });
 
 
-            tr.appendChild(tdName);
-            tr.appendChild(tdParticipation);
-            tr.appendChild(tdLessons);
-            tr.appendChild(tdPoints);
+    document
+        .querySelectorAll(".points")
+        .forEach(input => {
 
+            const value =
+                parseFloat(input.value);
 
-            resultTable.appendChild(tr);
+            if(!isNaN(value)){
 
-        }
+                points += value;
 
-    }
+            }
+
+        });
 
 
     document.getElementById(
         "totalParticipation"
-    ).textContent =
-        totalHours > 0
-            ? totalHours + " ч"
-            : "—";
+    ).textContent = participation;
 
 
     document.getElementById(
         "totalLessons"
-    ).textContent =
-        totalLessons;
+    ).textContent = lessons;
 
 
     document.getElementById(
         "totalPoints"
-    ).textContent =
-        totalPoints;
+    ).textContent = points;
+
+
+    document.getElementById(
+        "resultParticipation"
+    ).textContent = participation;
+
+
+    document.getElementById(
+        "resultLessons"
+    ).textContent = lessons;
+
+
+    document.getElementById(
+        "resultPoints"
+    ).textContent = points;
 
 }
 
 
-/* =====================================
-   ПРИСУТСТВИЕ 👥
-===================================== */
+/* =========================================================
+   ПРИСУТСТВИЕ
+========================================================= */
 
-function togglePresence() {
+function createPresenceTable(){
 
-    if (
-        presenceModal.classList.contains("show")
-    ) {
+    const body =
+        document.getElementById("presenceBody");
 
-        presenceModal.classList.remove("show");
+    body.innerHTML = "";
 
-        return;
-
-    }
-
-
-    /*
-     * При открытии берём тот же месяц,
-     * который выбран в основном журнале.
-     */
-
-    presenceMonth.value =
-        monthSelect.value;
-
-
-    createPresenceTable();
-
-    loadPresence();
-
-    presenceModal.classList.add("show");
-
-}
-
-
-/* =====================================
-   ЗАКРЫТИЕ ПО КЛИКУ ПО ФОНУ
-===================================== */
-
-presenceModal.addEventListener(
-    "click",
-    function(event) {
-
-        if (
-            event.target === presenceModal
-        ) {
-
-            togglePresence();
-
-        }
-
-    }
-);
-
-
-/* =====================================
-   ESC — ЗАКРЫТЬ ОКНО
-===================================== */
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Escape" &&
-            presenceModal.classList.contains("show")
-        ) {
-
-            togglePresence();
-
-        }
-
-    }
-);
-
-
-/* =====================================
-   СОЗДАНИЕ ТАБЛИЦЫ ПРИСУТСТВИЯ
-===================================== */
-
-function createPresenceTable() {
-
-    presenceTable.innerHTML = "";
-
-
-    for (let i = 1; i <= 5; i++) {
+    for(let i = 0; i < 5; i++){
 
         const tr =
             document.createElement("tr");
 
+        tr.innerHTML = `
 
-        const week =
-            document.createElement("td");
+            <td>${i + 1}</td>
 
-        week.textContent =
-            `${i} неделя`;
+            <td>
+                <input
+                    class="presence-input weekday"
+                    data-week="${i}"
+                    type="number"
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                >
+            </td>
 
+            <td>
+                <input
+                    class="presence-input weekend"
+                    data-week="${i}"
+                    type="number"
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                >
+            </td>
 
-        const weekdayCell =
-            document.createElement("td");
+        `;
 
-        const weekdayInput =
-            document.createElement("input");
-
-        weekdayInput.type =
-            "number";
-
-        weekdayInput.min =
-            "0";
-
-        weekdayInput.className =
-            "presence-input";
-
-        weekdayInput.id =
-            `presence-weekday-${i}`;
-
-        weekdayInput.addEventListener(
-            "input",
-            calculatePresence
-        );
-
-        weekdayCell.appendChild(
-            weekdayInput
-        );
-
-
-        const weekendCell =
-            document.createElement("td");
-
-        const weekendInput =
-            document.createElement("input");
-
-        weekendInput.type =
-            "number";
-
-        weekendInput.min =
-            "0";
-
-        weekendInput.className =
-            "presence-input";
-
-        weekendInput.id =
-            `presence-weekend-${i}`;
-
-        weekendInput.addEventListener(
-            "input",
-            calculatePresence
-        );
-
-        weekendCell.appendChild(
-            weekendInput
-        );
-
-
-        tr.appendChild(week);
-        tr.appendChild(weekdayCell);
-        tr.appendChild(weekendCell);
-
-
-        presenceTable.appendChild(tr);
+        body.appendChild(tr);
 
     }
-
-}
-
-
-/* =====================================
-   КЛЮЧ ПРИСУТСТВИЯ
-===================================== */
-
-function presenceKey() {
-
-    return "journal-presence-" +
-        presenceMonth.value;
-
-}
-
-
-/* =====================================
-   СОХРАНИТЬ ПРИСУТСТВИЕ
-===================================== */
-
-function savePresence() {
-
-    const weeks = [];
-
-
-    for (let i = 1; i <= 5; i++) {
-
-        const weekday =
-            document.getElementById(
-                `presence-weekday-${i}`
-            );
-
-        const weekend =
-            document.getElementById(
-                `presence-weekend-${i}`
-            );
-
-
-        weeks.push({
-
-            weekdays:
-                weekday.value,
-
-            weekend:
-                weekend.value
-
-        });
-
-    }
-
-
-    localStorage.setItem(
-
-        presenceKey(),
-
-        JSON.stringify(weeks)
-
-    );
-
-
-    document.getElementById(
-        "presenceSavedMessage"
-    ).textContent =
-        "✓ Присутствие сохранено";
-
-}
-
-
-/* =====================================
-   ЗАГРУЗИТЬ ПРИСУТСТВИЕ
-===================================== */
-
-function loadPresence() {
-
-    const data =
-        JSON.parse(
-            localStorage.getItem(
-                presenceKey()
-            ) || "null"
-        );
-
-
-    /*
-     * Сначала очищаем все поля.
-     */
-
-    for (let i = 1; i <= 5; i++) {
-
-        const weekday =
-            document.getElementById(
-                `presence-weekday-${i}`
-            );
-
-        const weekend =
-            document.getElementById(
-                `presence-weekend-${i}`
-            );
-
-
-        if (weekday) {
-            weekday.value = "";
-        }
-
-        if (weekend) {
-            weekend.value = "";
-        }
-
-    }
-
-
-    /*
-     * Если сохранённых данных нет —
-     * показываем пустую таблицу.
-     */
-
-    if (!data) {
-
-        calculatePresence();
-
-        document.getElementById(
-            "presenceSavedMessage"
-        ).textContent =
-            "Для этого месяца данных пока нет";
-
-        return;
-
-    }
-
-
-    /*
-     * Загружаем сохранённые данные.
-     */
-
-    for (let i = 1; i <= 5; i++) {
-
-        const weekday =
-            document.getElementById(
-                `presence-weekday-${i}`
-            );
-
-        const weekend =
-            document.getElementById(
-                `presence-weekend-${i}`
-            );
-
-
-        if (weekday) {
-
-            weekday.value =
-                data[i - 1]?.weekdays || "";
-
-        }
-
-
-        if (weekend) {
-
-            weekend.value =
-                data[i - 1]?.weekend || "";
-
-        }
-
-    }
-
-
-    calculatePresence();
-
-
-    document.getElementById(
-        "presenceSavedMessage"
-    ).textContent =
-        "Данные загружены";
-
-}
-
-
-/* =====================================
-   ИТОГ ПРИСУТСТВИЯ
-===================================== */
-
-function calculatePresence() {
-
-    let weekdays = 0;
-    let weekends = 0;
 
 
     document
         .querySelectorAll(".presence-input")
         .forEach(input => {
 
+            input.addEventListener("input", () => {
+
+                calculatePresence();
+
+                schedulePresenceAutoSave();
+
+            });
+
+        });
+
+}
+
+
+function loadPresence(){
+
+    const saved =
+        localStorage.getItem(
+            presenceKey(
+                Number(
+                    document.getElementById(
+                        "presenceMonth"
+                    ).value
+                )
+            )
+        );
+
+
+    let data = [];
+
+    if(saved){
+
+        try{
+
+            data = JSON.parse(saved);
+
+        }catch(e){
+
+            data = [];
+
+        }
+
+    }
+
+
+    document
+        .querySelectorAll(".weekday")
+        .forEach((input, index) => {
+
+            input.value =
+                data[index]?.weekday ?? "";
+
+        });
+
+
+    document
+        .querySelectorAll(".weekend")
+        .forEach((input, index) => {
+
+            input.value =
+                data[index]?.weekend ?? "";
+
+        });
+
+
+    calculatePresence();
+
+}
+
+
+function savePresence(showMessage = true){
+
+    const month =
+        Number(
+            document.getElementById(
+                "presenceMonth"
+            ).value
+        );
+
+
+    const data = [];
+
+    for(let i = 0; i < 5; i++){
+
+        const weekday =
+            document.querySelector(
+                `.weekday[data-week="${i}"]`
+            )?.value || "";
+
+        const weekend =
+            document.querySelector(
+                `.weekend[data-week="${i}"]`
+            )?.value || "";
+
+
+        data.push({
+
+            weekday,
+            weekend
+
+        });
+
+    }
+
+
+    localStorage.setItem(
+        presenceKey(month),
+        JSON.stringify(data)
+    );
+
+
+    if(showMessage){
+
+        setStatus(
+            `✓ Присутствие за ${monthName(month)} сохранено`
+        );
+
+    }
+
+}
+
+
+function schedulePresenceAutoSave(){
+
+    clearTimeout(presenceAutoSaveTimer);
+
+    presenceAutoSaveTimer = setTimeout(() => {
+
+        savePresence(false);
+
+    }, 500);
+
+}
+
+
+function calculatePresence(){
+
+    let weekdays = 0;
+    let weekends = 0;
+
+
+    document
+        .querySelectorAll(".weekday")
+        .forEach(input => {
+
             const value =
-                Number(input.value) || 0;
+                parseFloat(input.value);
 
-
-            if (
-                input.id.includes("weekday")
-            ) {
+            if(!isNaN(value)){
 
                 weekdays += value;
 
-            } else {
+            }
+
+        });
+
+
+    document
+        .querySelectorAll(".weekend")
+        .forEach(input => {
+
+            const value =
+                parseFloat(input.value);
+
+            if(!isNaN(value)){
 
                 weekends += value;
 
@@ -1614,119 +1279,667 @@ function calculatePresence() {
 
 
     document.getElementById(
-        "presenceWeekdaysTotal"
-    ).textContent =
-        weekdays;
+        "weekdayTotal"
+    ).textContent = weekdays;
 
 
     document.getElementById(
-        "presenceWeekendTotal"
-    ).textContent =
-        weekends;
+        "weekendTotal"
+    ).textContent = weekends;
 
 }
 
 
-/* =====================================
-   ПЕРЕКЛЮЧЕНИЕ МЕСЯЦА ПРИСУТСТВИЯ
-===================================== */
+/* =========================================================
+   МОДАЛЬНОЕ ОКНО
+========================================================= */
 
-presenceMonth.addEventListener(
-    "change",
-    function() {
+function togglePresence(show){
 
-        createPresenceTable();
+    const modal =
+        document.getElementById(
+            "presenceModal"
+        );
+
+    if(show){
+
+        modal.classList.add("show");
+
+        document.getElementById(
+            "presenceMonth"
+        ).value = currentMonth;
 
         loadPresence();
 
-    }
-);
+    }else{
 
+        savePresence(false);
 
-/* =====================================
-   ОЧИСТИТЬ МЕСЯЦ
-===================================== */
-
-function clearMonth() {
-
-    const monthName =
-        months[
-            Number(monthSelect.value) - 1
-        ];
-
-
-    if (
-        !confirm(
-            "Удалить записи за " +
-            monthName +
-            "?"
-        )
-    ) {
-
-        return;
+        modal.classList.remove("show");
 
     }
 
+}
+
+
+/* =========================================================
+   РЕЗЕРВНАЯ КОПИЯ
+========================================================= */
+
+function collectBackupData(){
 
     /*
-     * Удаляем основные записи.
-     */
+      Перед созданием резервной копии
+      сначала сохраняем текущие данные.
+    */
 
-    localStorage.removeItem(
-        storageKey()
+    saveData(false);
+
+    if(
+        document
+            .getElementById("presenceModal")
+            .classList.contains("show")
+    ){
+
+        savePresence(false);
+
+    }
+
+
+    const data = {};
+
+    for(let i = 0; i < localStorage.length; i++){
+
+        const key =
+            localStorage.key(i);
+
+        if(!key){
+            continue;
+        }
+
+
+        if(
+            key === "journal-people" ||
+            key.startsWith("journal-month-") ||
+            key.startsWith("journal-presence-")
+        ){
+
+            data[key] =
+                localStorage.getItem(key);
+
+        }
+
+    }
+
+
+    return {
+
+        backupVersion: 1,
+
+        app: "Журнал записей",
+
+        createdAt:
+            new Date().toISOString(),
+
+        data
+
+    };
+
+}
+
+
+function exportBackup(){
+
+    try{
+
+        const backup =
+            collectBackupData();
+
+
+        const json =
+            JSON.stringify(
+                backup,
+                null,
+                2
+            );
+
+
+        const blob =
+            new Blob(
+                [json],
+                {
+                    type:"application/json"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const link =
+            document.createElement("a");
+
+
+        const now =
+            new Date();
+
+
+        const date =
+            now.toISOString()
+                .slice(0,10);
+
+
+        const time =
+            now.toTimeString()
+                .slice(0,5)
+                .replace(":", "-");
+
+
+        link.href = url;
+
+        link.download =
+            `journal-backup-${date}_${time}.json`;
+
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+
+        setStatus(
+            "✓ Резервная копия сохранена в файл"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        setStatus(
+            "Ошибка создания резервной копии",
+            false
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ВОССТАНОВЛЕНИЕ ИЗ ФАЙЛА
+========================================================= */
+
+function restoreBackup(event){
+
+    const file =
+        event.target.files?.[0];
+
+    if(!file){
+        return;
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function(){
+
+        try{
+
+            const backup =
+                JSON.parse(
+                    reader.result
+                );
+
+
+            /*
+              Проверяем, что это действительно
+              резервная копия нашего журнала.
+            */
+
+            if(
+                !backup ||
+                typeof backup !== "object"
+            ){
+
+                throw new Error(
+                    "Файл имеет неверный формат"
+                );
+
+            }
+
+
+            if(
+                backup.app !==
+                "Журнал записей"
+            ){
+
+                throw new Error(
+                    "Это не резервная копия журнала"
+                );
+
+            }
+
+
+            if(
+                !backup.data ||
+                typeof backup.data !== "object"
+            ){
+
+                throw new Error(
+                    "В резервной копии нет данных"
+                );
+
+            }
+
+
+            if(
+                backup.backupVersion > 1
+            ){
+
+                throw new Error(
+                    "Версия резервной копии слишком новая"
+                );
+
+            }
+
+
+            const confirmed =
+                confirm(
+                    "Восстановить данные из этого файла?\n\n" +
+                    "Текущие данные журнала будут заменены " +
+                    "данными из резервной копии."
+                );
+
+
+            if(!confirmed){
+
+                event.target.value = "";
+
+                return;
+
+            }
+
+
+            /*
+              Удаляем только данные нашего журнала.
+              Остальной localStorage сайта не трогаем.
+            */
+
+            const keysToDelete = [];
+
+            for(let i = 0; i < localStorage.length; i++){
+
+                const key =
+                    localStorage.key(i);
+
+                if(
+                    key === "journal-people" ||
+                    key?.startsWith("journal-month-") ||
+                    key?.startsWith("journal-presence-")
+                ){
+
+                    keysToDelete.push(key);
+
+                }
+
+            }
+
+
+            keysToDelete.forEach(key => {
+
+                localStorage.removeItem(key);
+
+            });
+
+
+            /*
+              Восстанавливаем данные.
+            */
+
+            Object.entries(
+                backup.data
+            ).forEach(([key,value]) => {
+
+                if(
+                    key === "journal-people" ||
+                    key.startsWith("journal-month-") ||
+                    key.startsWith("journal-presence-")
+                ){
+
+                    /*
+                      Проверяем JSON перед записью.
+                    */
+
+                    JSON.parse(value);
+
+                    localStorage.setItem(
+                        key,
+                        value
+                    );
+
+                }
+
+            });
+
+
+            /*
+              Перестраиваем страницу.
+            */
+
+            createPeople();
+
+            loadMonth();
+
+            createPresenceTable();
+
+            document.getElementById(
+                "presenceMonth"
+            ).value = currentMonth;
+
+            loadPresence();
+
+
+            setStatus(
+                "✓ Данные успешно восстановлены"
+            );
+
+
+        }catch(error){
+
+            console.error(error);
+
+            alert(
+                "Не удалось восстановить резервную копию.\n\n" +
+                error.message
+            );
+
+            setStatus(
+                "Ошибка восстановления",
+                false
+            );
+
+        }
+
+
+        event.target.value = "";
+
+    };
+
+
+    reader.onerror = function(){
+
+        alert(
+            "Не удалось прочитать файл."
+        );
+
+        event.target.value = "";
+
+    };
+
+
+    reader.readAsText(
+        file,
+        "UTF-8"
     );
 
+}
+
+
+/* =========================================================
+   ОБЛАКО
+========================================================= */
+
+function cloudSync(){
 
     /*
-     * Удаляем отдельно данные
-     * присутствия этого месяца.
-     */
+      Пока облако не подключено.
+      Здесь намеренно НЕ делаем вид,
+      что данные действительно отправляются
+      в интернет.
+    */
+
+    saveData(false);
+
+    savePresence(false);
+
+    alert(
+        "☁️ Облачное сохранение пока не подключено.\n\n" +
+        "Локальные данные сохранены.\n\n" +
+        "Для настоящего облачного хранения нужно " +
+        "подключить серверную базу данных."
+    );
+
+}
+
+
+/* =========================================================
+   ОЧИСТКА МЕСЯЦА
+========================================================= */
+
+function clearMonth(){
+
+    const confirmed =
+        confirm(
+            `Очистить все данные за ${monthName(currentMonth)}?\n\n` +
+            "Имена людей НЕ будут удалены."
+        );
+
+
+    if(!confirmed){
+        return;
+    }
+
 
     localStorage.removeItem(
-        "journal-presence-" +
-        monthSelect.value
+        storageKey(currentMonth)
     );
 
 
     loadMonth();
 
 
-    /*
-     * Если окно присутствия открыто —
-     * обновляем и его.
-     */
-
-    if (
-        presenceModal.classList.contains("show")
-    ) {
-
-        presenceMonth.value =
-            monthSelect.value;
-
-        createPresenceTable();
-
-        loadPresence();
-
-    }
+    setStatus(
+        `✓ ${monthName(currentMonth)} очищен`
+    );
 
 }
 
 
-/* =====================================
-   ПЕРЕКЛЮЧЕНИЕ ОСНОВНОГО МЕСЯЦА
-===================================== */
+/* =========================================================
+   СОБЫТИЯ
+========================================================= */
 
-monthSelect.addEventListener(
-    "change",
-    loadMonth
+document
+    .getElementById("monthSelect")
+    .addEventListener("change", function(){
+
+        saveData(false);
+
+        currentMonth =
+            Number(this.value);
+
+        loadMonth();
+
+        /*
+          Если окно присутствия открыто —
+          переключаем и его.
+        */
+
+        document.getElementById(
+            "presenceMonth"
+        ).value = currentMonth;
+
+        loadPresence();
+
+    });
+
+
+document
+    .getElementById("saveBtn")
+    .addEventListener(
+        "click",
+        () => saveData(true)
+    );
+
+
+document
+    .getElementById("backupBtn")
+    .addEventListener(
+        "click",
+        exportBackup
+    );
+
+
+document
+    .getElementById("restoreBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            document
+                .getElementById("restoreFile")
+                .click();
+
+        }
+    );
+
+
+document
+    .getElementById("restoreFile")
+    .addEventListener(
+        "change",
+        restoreBackup
+    );
+
+
+document
+    .getElementById("cloudBtn")
+    .addEventListener(
+        "click",
+        cloudSync
+    );
+
+
+document
+    .getElementById("clearBtn")
+    .addEventListener(
+        "click",
+        clearMonth
+    );
+
+
+document
+    .getElementById("refreshBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            saveData(false);
+
+            createPeople();
+
+            loadMonth();
+
+            setStatus("✓ Страница обновлена");
+
+        }
+    );
+
+
+document
+    .getElementById("presenceBtn")
+    .addEventListener(
+        "click",
+        () => togglePresence(true)
+    );
+
+
+document
+    .getElementById("closePresence")
+    .addEventListener(
+        "click",
+        () => togglePresence(false)
+    );
+
+
+document
+    .getElementById("presenceCloseBtn")
+    .addEventListener(
+        "click",
+        () => togglePresence(false)
+    );
+
+
+document
+    .getElementById("presenceSaveBtn")
+    .addEventListener(
+        "click",
+        () => savePresence(true)
+    );
+
+
+document
+    .getElementById("presenceMonth")
+    .addEventListener("change", function(){
+
+        /*
+          Сначала сохраняем предыдущий выбранный месяц.
+        */
+
+        savePresence(false);
+
+        loadPresence();
+
+    });
+
+
+document
+    .getElementById("presenceModal")
+    .addEventListener("click", function(event){
+
+        if(event.target === this){
+
+            togglePresence(false);
+
+        }
+
+    });
+
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Escape" &&
+            document
+                .getElementById("presenceModal")
+                .classList.contains("show")
+        ){
+
+            togglePresence(false);
+
+        }
+
+    }
 );
 
 
-/* =====================================
+/* =========================================================
    ЗАПУСК
-===================================== */
+========================================================= */
+
+createMonthOptions();
 
 createPeople();
+
+createPresenceTable();
 
 loadMonth();
 
