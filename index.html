@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
 <title>Журнал записей</title>
 
 <style>
@@ -36,6 +37,10 @@ header {
 h1 {
     margin: 0 0 15px;
     font-size: 25px;
+}
+
+h2 {
+    margin-top: 0;
 }
 
 .controls {
@@ -174,6 +179,44 @@ td {
     font-size: 19px;
     margin: 0 0 12px;
 }
+
+.saved {
+    text-align: center;
+    color: #777;
+    font-size: 12px;
+    margin-top: 12px;
+}
+
+/* Присутствие */
+
+.presence {
+    display: none;
+    margin-top: 20px;
+}
+
+.presence h2 {
+    font-size: 19px;
+}
+
+.presence-input {
+    width: 80px;
+    padding: 9px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    outline: none;
+}
+
+.presence-input:focus {
+    border-color: #635bff;
+}
+
+.presence-total {
+    font-weight: 700;
+}
+
+/* Кнопка обновления */
+
 .update-button {
     text-align: center;
     margin: 20px 0 10px;
@@ -189,14 +232,9 @@ td {
     font-weight: 500;
     box-shadow: none;
 }
-.saved {
-    text-align: center;
-    color: #777;
-    font-size: 12px;
-    margin-top: 12px;
-}
 
 @media(max-width:600px) {
+
     .container {
         padding: 10px;
     }
@@ -221,38 +259,49 @@ td {
 }
 </style>
 </head>
-<div class="update-button">
-    <button onclick="location.reload()">↻ Обновить</button>
-    <button onclick="togglePresence()">👥</button>
-</div>
+
+
 <body>
 
 <div class="container">
 
 <header>
+
     <h1>📋 Журнал записей</h1>
 
     <div class="controls">
+
         <select id="month"></select>
 
-        <button onclick="saveData()">💾 Сохранить</button>
+        <button onclick="saveData()">
+            💾 Сохранить
+        </button>
+
+        <button class="secondary" onclick="togglePresence()">
+            👥
+        </button>
 
         <button class="secondary" onclick="clearMonth()">
             Очистить месяц
         </button>
+
     </div>
 
     <div class="saved" id="savedMessage">
         Выберите месяц
     </div>
+
 </header>
 
+
+<!-- ОСНОВНАЯ ТАБЛИЦА -->
 
 <div class="card">
 
 <table>
 
 <thead>
+
 <tr>
     <th class="number">№</th>
     <th>Кто</th>
@@ -260,6 +309,7 @@ td {
     <th>Уроки</th>
     <th>Баллы</th>
 </tr>
+
 </thead>
 
 <tbody id="peopleTable"></tbody>
@@ -269,25 +319,52 @@ td {
 </div>
 
 
+<!-- ИТОГИ -->
+
 <div class="summary">
 
 <div class="summary-box">
-    <div class="summary-title">Участие / часы</div>
-    <div class="summary-value" id="totalParticipation">0</div>
+
+    <div class="summary-title">
+        Участие / часы
+    </div>
+
+    <div class="summary-value" id="totalParticipation">
+        0
+    </div>
+
 </div>
+
 
 <div class="summary-box">
-    <div class="summary-title">Уроки</div>
-    <div class="summary-value" id="totalLessons">0</div>
+
+    <div class="summary-title">
+        Уроки
+    </div>
+
+    <div class="summary-value" id="totalLessons">
+        0
+    </div>
+
 </div>
+
 
 <div class="summary-box">
-    <div class="summary-title">Баллы</div>
-    <div class="summary-value" id="totalPoints">0</div>
-</div>
+
+    <div class="summary-title">
+        Баллы
+    </div>
+
+    <div class="summary-value" id="totalPoints">
+        0
+    </div>
 
 </div>
 
+</div>
+
+
+<!-- ИТОГОВАЯ ТАБЛИЦА -->
 
 <div class="card result">
 
@@ -296,12 +373,14 @@ td {
 <table>
 
 <thead>
+
 <tr>
     <th>Кто</th>
     <th>Участие</th>
     <th>Уроки</th>
     <th>Баллы</th>
 </tr>
+
 </thead>
 
 <tbody id="resultTable"></tbody>
@@ -310,10 +389,79 @@ td {
 
 </div>
 
+
+<!-- ОТДЕЛЬНАЯ ТАБЛИЦА ПРИСУТСТВИЯ -->
+
+<div class="card presence" id="presenceBlock">
+
+<h2>👥 Присутствие учеников</h2>
+
+<table>
+
+<thead>
+
+<tr>
+    <th>Неделя</th>
+    <th>Будни</th>
+    <th>Вых.</th>
+</tr>
+
+</thead>
+
+<tbody id="presenceTable"></tbody>
+
+<tfoot>
+
+<tr>
+
+    <th>Итого</th>
+
+    <th
+        class="presence-total"
+        id="presenceWeekdaysTotal">
+        0
+    </th>
+
+    <th
+        class="presence-total"
+        id="presenceWeekendTotal">
+        0
+    </th>
+
+</tr>
+
+</tfoot>
+
+</table>
+
+<br>
+
+<button onclick="savePresence()">
+    💾 Сохранить присутствие
+</button>
+
+</div>
+
+
+<!-- ОБНОВИТЬ -->
+
+<div class="update-button">
+
+    <button onclick="location.reload()">
+        ↻ Обновить
+    </button>
+
+</div>
+
+
 </div>
 
 
 <script>
+
+/* =========================
+   НАСТРОЙКИ
+========================= */
 
 const PEOPLE_COUNT = 30;
 
@@ -332,178 +480,269 @@ const months = [
     "Декабрь"
 ];
 
-const monthSelect = document.getElementById("month");
-const peopleTable = document.getElementById("peopleTable");
-const resultTable = document.getElementById("resultTable");
-// Создаём присутствие учеников
-<div id="presenceBlock" style="display:none; margin-top:20px;">
 
-    <h2>👥 Присутствие учеников</h2>
+/* =========================
+   ЭЛЕМЕНТЫ
+========================= */
 
-    <table>
-        <thead>
-            <tr>
-                <th>Неделя</th>
-                <th>Будни</th>
-                <th>Вых.</th>
-            </tr>
-        </thead>
+const monthSelect =
+    document.getElementById("month");
 
-        <tbody id="presenceTable"></tbody>
+const peopleTable =
+    document.getElementById("peopleTable");
 
-        <tfoot>
-            <tr>
-                <th>Итого</th>
-                <th id="presenceWeekdaysTotal">0</th>
-                <th id="presenceWeekendTotal">0</th>
-            </tr>
-        </tfoot>
-    </table>
+const resultTable =
+    document.getElementById("resultTable");
 
-</div>
-// Заполняем месяцы
+
+/* =========================
+   МЕСЯЦЫ
+========================= */
+
 months.forEach((month, index) => {
 
-    const option = document.createElement("option");
+    const option =
+        document.createElement("option");
 
     option.value = index + 1;
+
     option.textContent = month;
 
     monthSelect.appendChild(option);
 
 });
 
+monthSelect.value =
+    new Date().getMonth() + 1;
 
-// Текущий месяц
-monthSelect.value = new Date().getMonth() + 1;
+
+/* =========================
+   ОБЩИЙ СПИСОК УЧАСТНИКОВ
+========================= */
+
+function getPeopleNames() {
+
+    const saved =
+        JSON.parse(
+            localStorage.getItem("journal-people")
+            || "null"
+        );
+
+    if (saved && Array.isArray(saved)) {
+        return saved;
+    }
+
+    return Array(PEOPLE_COUNT).fill("");
+
+}
 
 
-// Создаём 26 человек
+function savePeopleNames() {
+
+    const names = [];
+
+    for (let i = 1; i <= PEOPLE_COUNT; i++) {
+
+        names.push(
+            document.getElementById(
+                `name-${i}`
+            ).value
+        );
+
+    }
+
+    localStorage.setItem(
+        "journal-people",
+        JSON.stringify(names)
+    );
+
+}
+
+
+/* =========================
+   СОЗДАНИЕ УЧАСТНИКОВ
+========================= */
+
 function createPeople() {
 
     peopleTable.innerHTML = "";
 
+    const names = getPeopleNames();
+
     for (let i = 1; i <= PEOPLE_COUNT; i++) {
 
-        const tr = document.createElement("tr");
+        const tr =
+            document.createElement("tr");
 
         tr.innerHTML = `
 
-            <td class="number">${i}</td>
+            <td class="number">
+                ${i}
+            </td>
 
             <td class="name">
+
                 <input
                     type="text"
                     id="name-${i}"
                     placeholder="Имя ${i}"
-                    onchange="updateResult()"
+                    value="${escapeHTML(
+                        names[i - 1] || ""
+                    )}"
+                    onchange="savePeopleNames(); updateResult()"
                 >
+
             </td>
 
             <td>
+
                 <input
-                    class="data-input participation"
+                    class="data-input"
                     id="participation-${i}"
                     placeholder="+ или часы"
                     oninput="updateResult()"
                 >
+
             </td>
 
             <td>
+
                 <input
-                    class="data-input lessons"
+                    class="data-input"
                     id="lessons-${i}"
                     type="number"
                     min="0"
                     placeholder="0"
                     oninput="updateResult()"
                 >
+
             </td>
 
             <td>
+
                 <input
-                    class="data-input points"
+                    class="data-input"
                     id="points-${i}"
                     type="number"
                     min="0"
                     placeholder="0"
                     oninput="updateResult()"
                 >
-            </td>
 
+            </td>
         `;
 
         peopleTable.appendChild(tr);
+
     }
 
 }
 
 
-// Ключ хранения
+/* =========================
+   КЛЮЧ МЕСЯЦА
+========================= */
+
 function storageKey() {
 
-    return "journal-month-" + monthSelect.value;
+    return "journal-month-" +
+        monthSelect.value;
 
 }
 
 
-// Загрузка месяца
+/* =========================
+   ЗАГРУЗКА МЕСЯЦА
+========================= */
+
 function loadMonth() {
 
-    const data = JSON.parse(
-        localStorage.getItem(storageKey()) || "null"
-    );
+    const data =
+        JSON.parse(
+            localStorage.getItem(
+                storageKey()
+            ) || "null"
+        );
 
-    for (let i = 1; i <= PEOPLE_COUNT; i++) {
 
-        document.getElementById(`name-${i}`).value =
-            data?.people?.[i-1]?.name || "";
+    for (
+        let i = 1;
+        i <= PEOPLE_COUNT;
+        i++
+    ) {
 
-        document.getElementById(`participation-${i}`).value =
-            data?.people?.[i-1]?.participation || "";
+        document.getElementById(
+            `participation-${i}`
+        ).value =
+            data?.people?.[i - 1]?.participation
+            || "";
 
-        document.getElementById(`lessons-${i}`).value =
-            data?.people?.[i-1]?.lessons || "";
+        document.getElementById(
+            `lessons-${i}`
+        ).value =
+            data?.people?.[i - 1]?.lessons
+            || "";
 
-        document.getElementById(`points-${i}`).value =
-            data?.people?.[i-1]?.points || "";
+        document.getElementById(
+            `points-${i}`
+        ).value =
+            data?.people?.[i - 1]?.points
+            || "";
 
     }
+
 
     updateResult();
 
-    document.getElementById("savedMessage").textContent =
-        data
+    loadPresence();
+
+
+    document.getElementById(
+        "savedMessage"
+    ).textContent = data
         ? "Записи загружены"
         : "Для этого месяца записей пока нет";
 
 }
 
 
-// Сохранение
+/* =========================
+   СОХРАНЕНИЕ ОСНОВНЫХ ДАННЫХ
+========================= */
+
 function saveData() {
+
+    savePeopleNames();
 
     const people = [];
 
-    for (let i = 1; i <= PEOPLE_COUNT; i++) {
+    for (
+        let i = 1;
+        i <= PEOPLE_COUNT;
+        i++
+    ) {
 
         people.push({
 
-            name:
-                document.getElementById(`name-${i}`).value,
-
             participation:
-                document.getElementById(`participation-${i}`).value,
+                document.getElementById(
+                    `participation-${i}`
+                ).value,
 
             lessons:
-                document.getElementById(`lessons-${i}`).value,
+                document.getElementById(
+                    `lessons-${i}`
+                ).value,
 
             points:
-                document.getElementById(`points-${i}`).value
+                document.getElementById(
+                    `points-${i}`
+                ).value
 
         });
 
     }
+
 
     localStorage.setItem(
 
@@ -515,13 +754,19 @@ function saveData() {
 
     );
 
-    document.getElementById("savedMessage").textContent =
+
+    document.getElementById(
+        "savedMessage"
+    ).textContent =
         "✓ Сохранено";
 
 }
 
 
-// Итоговая таблица
+/* =========================
+   ИТОГОВАЯ ТАБЛИЦА
+========================= */
+
 function updateResult() {
 
     resultTable.innerHTML = "";
@@ -530,36 +775,55 @@ function updateResult() {
     let totalPoints = 0;
     let totalHours = 0;
 
-    for (let i = 1; i <= PEOPLE_COUNT; i++) {
+
+    for (
+        let i = 1;
+        i <= PEOPLE_COUNT;
+        i++
+    ) {
 
         const name =
-            document.getElementById(`name-${i}`).value.trim();
+            document.getElementById(
+                `name-${i}`
+            ).value.trim();
 
         const participation =
-            document.getElementById(`participation-${i}`).value.trim();
+            document.getElementById(
+                `participation-${i}`
+            ).value.trim();
 
         const lessons =
-            Number(document.getElementById(`lessons-${i}`).value) || 0;
+            Number(
+                document.getElementById(
+                    `lessons-${i}`
+                ).value
+            ) || 0;
 
         const points =
-            Number(document.getElementById(`points-${i}`).value) || 0;
+            Number(
+                document.getElementById(
+                    `points-${i}`
+                ).value
+            ) || 0;
 
 
         totalLessons += lessons;
+
         totalPoints += points;
 
 
-        // Если участие введено числом — считаем как часы
         if (
             participation !== "+" &&
             participation !== "" &&
             !isNaN(Number(participation))
         ) {
-            totalHours += Number(participation);
+
+            totalHours +=
+                Number(participation);
+
         }
 
 
-        // В итог не выводим полностью пустые строки
         if (
             name ||
             participation ||
@@ -567,17 +831,30 @@ function updateResult() {
             points
         ) {
 
-            const tr = document.createElement("tr");
+            const tr =
+                document.createElement("tr");
 
             tr.innerHTML = `
 
-                <td>${escapeHTML(name || "Без имени")}</td>
+                <td>
+                    ${escapeHTML(
+                        name || "Без имени"
+                    )}
+                </td>
 
-                <td>${escapeHTML(participation || "—")}</td>
+                <td>
+                    ${escapeHTML(
+                        participation || "—"
+                    )}
+                </td>
 
-                <td>${lessons}</td>
+                <td>
+                    ${lessons}
+                </td>
 
-                <td>${points}</td>
+                <td>
+                    ${points}
+                </td>
 
             `;
 
@@ -588,61 +865,383 @@ function updateResult() {
     }
 
 
-    document.getElementById("totalParticipation").textContent =
+    document.getElementById(
+        "totalParticipation"
+    ).textContent =
         totalHours > 0
         ? totalHours + " ч"
         : "—";
 
-    document.getElementById("totalLessons").textContent =
+
+    document.getElementById(
+        "totalLessons"
+    ).textContent =
         totalLessons;
 
-    document.getElementById("totalPoints").textContent =
+
+    document.getElementById(
+        "totalPoints"
+    ).textContent =
         totalPoints;
 
 }
 
 
-// Очистить месяц
+/* =========================
+   ПРИСУТСТВИЕ 👥
+========================= */
+
+function togglePresence() {
+
+    const block =
+        document.getElementById(
+            "presenceBlock"
+        );
+
+
+    if (
+        block.style.display === "none" ||
+        block.style.display === ""
+    ) {
+
+        block.style.display = "block";
+
+        createPresenceTable();
+
+        loadPresence();
+
+    } else {
+
+        block.style.display = "none";
+
+    }
+
+}
+
+
+/* =========================
+   СОЗДАНИЕ ТАБЛИЦЫ
+========================= */
+
+function createPresenceTable() {
+
+    const table =
+        document.getElementById(
+            "presenceTable"
+        );
+
+    table.innerHTML = "";
+
+
+    for (let i = 1; i <= 5; i++) {
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML = `
+
+            <td>
+                ${i} неделя
+            </td>
+
+            <td>
+
+                <input
+                    type="number"
+                    min="0"
+                    class="presence-input"
+                    id="presence-weekday-${i}"
+                    oninput="calculatePresence()"
+                >
+
+            </td>
+
+            <td>
+
+                <input
+                    type="number"
+                    min="0"
+                    class="presence-input"
+                    id="presence-weekend-${i}"
+                    oninput="calculatePresence()"
+                >
+
+            </td>
+
+        `;
+
+
+        table.appendChild(tr);
+
+    }
+
+}
+
+
+/* =========================
+   КЛЮЧ ПРИСУТСТВИЯ
+========================= */
+
+function presenceKey() {
+
+    return "journal-presence-" +
+        monthSelect.value;
+
+}
+
+
+/* =========================
+   СОХРАНИТЬ ПРИСУТСТВИЕ
+========================= */
+
+function savePresence() {
+
+    const weeks = [];
+
+    for (let i = 1; i <= 5; i++) {
+
+        weeks.push({
+
+            weekdays:
+                document.getElementById(
+                    `presence-weekday-${i}`
+                ).value,
+
+            weekend:
+                document.getElementById(
+                    `presence-weekend-${i}`
+                ).value
+
+        });
+
+    }
+
+
+    localStorage.setItem(
+
+        presenceKey(),
+
+        JSON.stringify(weeks)
+
+    );
+
+
+    alert("✓ Присутствие сохранено");
+
+}
+
+
+/* =========================
+   ЗАГРУЗИТЬ ПРИСУТСТВИЕ
+========================= */
+
+function loadPresence() {
+
+    const data =
+        JSON.parse(
+            localStorage.getItem(
+                presenceKey()
+            ) || "null"
+        );
+
+
+    if (!data) {
+
+        for (let i = 1; i <= 5; i++) {
+
+            const weekday =
+                document.getElementById(
+                    `presence-weekday-${i}`
+                );
+
+            const weekend =
+                document.getElementById(
+                    `presence-weekend-${i}`
+                );
+
+            if (weekday) weekday.value = "";
+
+            if (weekend) weekend.value = "";
+
+        }
+
+        calculatePresence();
+
+        return;
+
+    }
+
+
+    for (let i = 1; i <= 5; i++) {
+
+        const weekday =
+            document.getElementById(
+                `presence-weekday-${i}`
+            );
+
+        const weekend =
+            document.getElementById(
+                `presence-weekend-${i}`
+            );
+
+
+        if (weekday) {
+
+            weekday.value =
+                data[i - 1]?.weekdays || "";
+
+        }
+
+
+        if (weekend) {
+
+            weekend.value =
+                data[i - 1]?.weekend || "";
+
+        }
+
+    }
+
+
+    calculatePresence();
+
+}
+
+
+/* =========================
+   ИТОГ ПРИСУТСТВИЯ
+========================= */
+
+function calculatePresence() {
+
+    let weekdays = 0;
+    let weekends = 0;
+
+
+    document
+        .querySelectorAll(
+            ".presence-input"
+        )
+        .forEach(input => {
+
+            const value =
+                Number(input.value) || 0;
+
+            if (
+                input.id.includes(
+                    "weekday"
+                )
+            ) {
+
+                weekdays += value;
+
+            } else {
+
+                weekends += value;
+
+            }
+
+        });
+
+
+    document.getElementById(
+        "presenceWeekdaysTotal"
+    ).textContent =
+        weekdays;
+
+
+    document.getElementById(
+        "presenceWeekendTotal"
+    ).textContent =
+        weekends;
+
+}
+
+
+/* =========================
+   ОЧИСТИТЬ МЕСЯЦ
+========================= */
+
 function clearMonth() {
 
     if (
         !confirm(
-            "Удалить все записи за " +
-            months[monthSelect.value - 1] +
+            "Удалить записи за " +
+            months[
+                monthSelect.value - 1
+            ] +
             "?"
         )
     ) return;
 
 
-    localStorage.removeItem(storageKey());
+    localStorage.removeItem(
+        storageKey()
+    );
+
+    localStorage.removeItem(
+        presenceKey()
+    );
+
 
     loadMonth();
 
 }
 
 
-// Защита вывода имён
+/* =========================
+   ЗАЩИТА ИМЁН
+========================= */
+
 function escapeHTML(text) {
 
-    return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(text)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
 
-// Переключение месяца
+/* =========================
+   ПЕРЕКЛЮЧЕНИЕ МЕСЯЦА
+========================= */
+
 monthSelect.addEventListener(
     "change",
     loadMonth
 );
 
 
-// Запуск
+/* =========================
+   ЗАПУСК
+========================= */
+
 createPeople();
+
 loadMonth();
 
 </script>
