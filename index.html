@@ -174,7 +174,21 @@ td {
     font-size: 19px;
     margin: 0 0 12px;
 }
+.update-button {
+    text-align: center;
+    margin: 20px 0 10px;
+}
 
+.update-button button {
+    background: rgba(255,255,255,.7);
+    color: #666;
+    border: 1px solid rgba(0,0,0,.08);
+    padding: 7px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    box-shadow: none;
+}
 .saved {
     text-align: center;
     color: #777;
@@ -207,7 +221,9 @@ td {
 }
 </style>
 </head>
-
+<div class="update-button">
+    <button onclick="location.reload()">↻ Обновить</button>
+</div>
 <body>
 
 <div class="container">
