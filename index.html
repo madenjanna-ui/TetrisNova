@@ -1,10 +1,92 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b5cad"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Report"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png"><title>Report</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#f3f6fb;color:#162033}.app{max-width:980px;margin:auto;padding:calc(14px + env(safe-area-inset-top)) 12px calc(30px + env(safe-area-inset-bottom))}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.top h1{margin:0;font-size:30px}.card{background:#fff;border-radius:18px;padding:14px;box-shadow:0 8px 28px #233a5b12;margin-bottom:14px}.months{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.month{border:1px solid #e2e8f0;background:#fff;border-radius:16px;padding:14px;text-align:left;box-shadow:0 4px 16px #1b35520d}.month b{display:block;font-size:17px}.month small{display:block;margin-top:6px;color:#667085}.bar{height:5px;background:#e6ebf2;border-radius:9px;margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;background:#2783ff}.month.done .bar i{background:#25b45b}.month.done small{color:#16833d}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:0;border-radius:12px;padding:11px 13px;font:inherit;background:#eaf2ff;color:#075bb6}.btn.primary{background:#0879f9;color:#fff}.btn.danger{background:#fff0f0;color:#c53131}.btn.gray{background:#eef1f5;color:#27364a}.hidden{display:none!important}.headrow{display:flex;align-items:center;gap:10px}.back{border:0;background:transparent;font-size:28px;color:#0879f9;padding:0 5px}.headrow h2{flex:1;text-align:center;margin:4px 40px 4px 0}.tablewrap{overflow:auto;border-radius:12px;border:1px solid #e5eaf1}table{width:100%;border-collapse:collapse;min-width:610px;background:#fff}th,td{border-bottom:1px solid #edf0f4;padding:8px;text-align:center}th{background:#f7f9fc;font-size:13px}td:nth-child(2),th:nth-child(2){text-align:left}.name{width:100%;min-width:145px}.cell,.name{border:1px solid #dce3ec;border-radius:8px;padding:8px;background:#fff;font:inherit}.cell{width:78px;text-align:center}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.sum{background:#f5f8fc;border-radius:12px;padding:10px;text-align:center}.sum small{color:#697586}.sum strong{display:block;font-size:22px;margin-top:3px}.sectiontitle{display:flex;justify-content:space-between;align-items:center;gap:8px}.sectiontitle h3{margin:0}.muted{color:#697586;font-size:13px}.nosubmit{font-weight:700;color:#9aa3af}.ok{color:#169447;font-weight:700}.presence-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.presence-grid label{background:#f7f9fc;border-radius:12px;padding:10px}.presence-grid input{width:100%;margin-top:6px;padding:10px;border:1px solid #dce3ec;border-radius:9px}.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#162033;color:#fff;padding:10px 15px;border-radius:20px;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}.backupbox{display:flex;gap:8px;flex-wrap:wrap}.status{font-size:13px;color:#697586;margin-top:8px}@media(min-width:700px){.months{grid-template-columns:repeat(3,1fr)}}
+
+/* --- Compact attendance screen --- */
+.presence-card{padding:16px}
+.presence-note{margin:0 0 14px}
+.presence-table{
+  overflow:hidden;
+  border:1px solid #e6ebf2;
+  border-radius:16px;
+  background:#fff;
+}
+.presence-head,.presence-row{
+  display:grid;
+  grid-template-columns:64px 1fr 1fr;
+  align-items:center;
+}
+.presence-head{
+  background:#f6f8fc;
+  color:#697586;
+  font-size:13px;
+  font-weight:600;
+  padding:10px 8px;
+}
+.presence-head span{text-align:center}
+.presence-row{
+  min-height:62px;
+  padding:8px;
+  border-top:1px solid #edf0f4;
+}
+.presence-row:first-of-type{border-top:0}
+.presence-week{
+  text-align:center;
+  font-size:16px;
+  font-weight:700;
+  color:#27364a;
+}
+.presence-row input{
+  display:block;
+  width:calc(100% - 8px);
+  margin:0 4px;
+  min-width:0;
+  height:44px;
+  padding:8px 10px;
+  border:1px solid #d9e1ec;
+  border-radius:11px;
+  background:#f9fbfd;
+  color:#162033;
+  font:inherit;
+  font-size:17px;
+  text-align:center;
+  outline:none;
+  -webkit-appearance:none;
+  appearance:none;
+}
+.presence-row input:focus{
+  border-color:#2783ff;
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(39,131,255,.12);
+}
+.presence-summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:14px;
+}
+.presence-summary .sum{
+  padding:11px 6px;
+  border:1px solid #edf1f6;
+}
+.presence-summary .sum strong{font-size:24px}
+.presence-save{
+  width:100%;
+  margin-top:12px;
+  padding:13px 16px;
+  border-radius:13px;
+  font-weight:600;
+}
+@media(max-width:390px){
+  .presence-head,.presence-row{grid-template-columns:54px 1fr 1fr}
+  .presence-row{padding:7px 5px}
+  .presence-row input{margin:0 3px;width:calc(100% - 6px)}
+}
+
 </style></head><body><main class="app">
 <section id="home"><div class="top"><h1>Report</h1><span>📋</span></div><div class="card"><div class="months" id="months"></div></div><div class="card"><div class="sectiontitle"><h3>Данные журнала</h3><span class="muted">все месяцы одним файлом</span></div><p class="muted">Резерв включает имена, отчёты и посещение за все 12 месяцев. Его можно открыть на другом телефоне.</p><div class="backupbox"><button class="btn primary" id="exportBtn">💾 Резервная копия</button><button class="btn" id="importBtn">📂 Восстановить</button><input id="fileInput" type="file" accept="application/json,.json" hidden></div><div class="status" id="installStatus">Данные сохраняются автоматически на этом устройстве.</div></div></section>
 <section id="monthView" class="hidden"><div class="headrow"><button class="back" id="backBtn">‹</button><h2 id="monthTitle"></h2></div><div class="card"><div class="actions"><button class="btn" id="presenceBtn">👥 Посещение</button><button class="btn primary" id="saveBtn">💾 Сохранить</button><button class="btn danger" id="clearBtn">Очистить месяц</button></div></div><div class="card"><div class="tablewrap"><table><thead><tr><th>№</th><th>Кто</th><th>Участие / часы</th><th>Уроки</th><th>Баллы</th></tr></thead><tbody id="editBody"></tbody></table></div><div class="summary"><div class="sum"><small>Участие +</small><strong id="sPlus">0</strong></div><div class="sum"><small>Часы</small><strong id="sHours">0</strong></div><div class="sum"><small>Уроки</small><strong id="sLessons">0</strong></div><div class="sum"><small>Баллы</small><strong id="sPoints">0</strong></div></div></div><div class="card"><div class="sectiontitle"><h3 id="resultTitle">Итог</h3><span class="muted" id="submitted"></span></div><p class="muted">В итог выводятся все 30 человек. Если отчёт не заполнен — ставится «—».</p><div class="tablewrap"><table><thead><tr><th>№</th><th>Кто</th><th>Участие</th><th>Уроки</th><th>Баллы</th></tr></thead><tbody id="resultBody"></tbody></table></div></div></section>
-<section id="presenceView" class="hidden"><div class="headrow"><button class="back" id="presenceBack">‹</button><h2 id="presenceTitle"></h2></div><div class="card"><p class="muted">Посещение хранится отдельно для каждого месяца.</p><div id="presenceRows"></div><div class="summary" style="grid-template-columns:repeat(3,1fr)"><div class="sum"><small>Будни</small><strong id="pWeek">0</strong></div><div class="sum"><small>Выходные</small><strong id="pWeekend">0</strong></div><div class="sum"><small>Всего</small><strong id="pTotal">0</strong></div></div><div class="actions" style="margin-top:12px"><button class="btn primary" id="presenceSave">💾 Сохранить</button></div></div></section>
+<section id="presenceView" class="hidden"><div class="headrow"><button class="back" id="presenceBack">‹</button><h2 id="presenceTitle"></h2></div><div class="card presence-card"><p class="muted presence-note">Посещение хранится отдельно для каждого месяца.</p><div class="presence-table"><div class="presence-head"><span>Неделя</span><span>Будни</span><span>Выходные</span></div><div id="presenceRows"></div></div><div class="presence-summary"><div class="sum"><small>Будни</small><strong id="pWeek">0</strong></div><div class="sum"><small>Выходные</small><strong id="pWeekend">0</strong></div><div class="sum"><small>Всего</small><strong id="pTotal">0</strong></div></div><button class="btn primary presence-save" id="presenceSave">Сохранить посещение</button></div></section>
 </main><div class="toast" id="toast"></div>
 <script>
 const N=30, MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];let current=new Date().getMonth()+1,timer;
@@ -31,7 +113,7 @@ function saveCurrent(){let ns=$$('.name').map(x=>x.value.trim()),d=Array.from({l
 function updateSummary(){let plus=0,h=0,l=0,p=0;$$('.part').forEach(x=>{let v=x.value.trim().replace(',','.');if(v==='+')plus++;else if(v!==''&&!isNaN(v))h+=+v});$$('.lessons').forEach(x=>l+=+(x.value||0));$$('.points').forEach(x=>p+=+(x.value||0));$('#sPlus').textContent=plus;$('#sHours').textContent=h;$('#sLessons').textContent=l;$('#sPoints').textContent=p}
 function renderResult(){let ns=names(),d=monthData(current);if(!$('#monthView').classList.contains('hidden')){ns=$$('.name').length?$$('.name').map(x=>x.value.trim()):ns;d=$$('.part').length?Array.from({length:N},(_,i)=>({participation:$(`.part[data-i="${i}"]`).value.trim(),lessons:$(`.lessons[data-i="${i}"]`).value,points:$(`.points[data-i="${i}"]`).value})):d}let b=$('#resultBody');b.innerHTML='';let count=0;for(let i=0;i<N;i++){let r=d[i],ok=hasReport(r);if(ok)count++;let tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}</td><td>${esc(ns[i]||'—')}</td><td class="${ok?'':'nosubmit'}">${ok?esc(r.participation||'—'):'—'}</td><td class="${ok?'':'nosubmit'}">${ok?esc(r.lessons||'—'):'—'}</td><td class="${ok?'':'nosubmit'}">${ok?esc(r.points||'—'):'—'}</td>`;b.appendChild(tr)}$('#submitted').textContent=`Сдали: ${count}/${N}`}
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function openPresence(){saveCurrent();$('#presenceTitle').textContent='Посещение — '+MONTHS[current-1].toLowerCase();let d=parse(pkey(current),[]),b=$('#presenceRows');b.innerHTML='';for(let i=0;i<5;i++){let r=d[i]||{},div=document.createElement('div');div.className='presence-grid';div.innerHTML=`<label>Неделя ${i+1} — будни<input class="pw" data-i="${i}" type="number" min="0" value="${esc(r.weekday||'')}"></label><label>Неделя ${i+1} — выходные<input class="pe" data-i="${i}" type="number" min="0" value="${esc(r.weekend||'')}"></label>`;b.appendChild(div)}$$('.pw,.pe').forEach(x=>x.oninput=()=>{calcPresence();savePresence()});calcPresence();show('presenceView')}
+function openPresence(){saveCurrent();$('#presenceTitle').textContent='Посещение — '+MONTHS[current-1].toLowerCase();let d=parse(pkey(current),[]),b=$('#presenceRows');b.innerHTML='';for(let i=0;i<5;i++){let r=d[i]||{},div=document.createElement('div');div.className='presence-row';div.innerHTML=`<div class="presence-week">${i+1}</div><input class="pw" data-i="${i}" type="number" inputmode="numeric" min="0" aria-label="Неделя ${i+1}, будни" value="${esc(r.weekday||'')}"><input class="pe" data-i="${i}" type="number" inputmode="numeric" min="0" aria-label="Неделя ${i+1}, выходные" value="${esc(r.weekend||'')}">`;b.appendChild(div)}$$('.pw,.pe').forEach(x=>x.oninput=()=>{calcPresence();savePresence()});calcPresence();show('presenceView')}
 function savePresence(){let d=Array.from({length:5},(_,i)=>({weekday:$(`.pw[data-i="${i}"]`).value,weekend:$(`.pe[data-i="${i}"]`).value}));localStorage.setItem(pkey(current),JSON.stringify(d))}function calcPresence(){let w=$$('.pw').reduce((a,x)=>a+(+x.value||0),0),e=$$('.pe').reduce((a,x)=>a+(+x.value||0),0);$('#pWeek').textContent=w;$('#pWeekend').textContent=e;$('#pTotal').textContent=w+e}
 function exportAll(){saveCurrent();let data={format:'ReportBackup',version:1,createdAt:new Date().toISOString(),people:parse('report-people',[]),months:{},presence:{}};for(let m=1;m<=12;m++){data.months[m]=parse(key(m),[]);data.presence[m]=parse(pkey(m),[])}let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a'),u=URL.createObjectURL(blob),dt=new Date().toISOString().slice(0,10);a.href=u;a.download=`Report-backup-${dt}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);toast('Резерв сохранён')}
 async function importAll(file){try{let data=JSON.parse(await file.text());
